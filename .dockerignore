@@ -1,0 +1,64 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.whl
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment secrets — never bake these into the image
+.env
+*.env
+
+# Database files — use managed PostgreSQL in production
+*.db
+*.sqlite
+*.sqlite3
+
+# Tests and dev tools
+test_*.py
+*_test.py
+pytest.ini
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Docs (not needed at runtime)
+README.md
+HOW_TO_TEST.md
+LICENSE
+*.md
+
+# Temp / JSON test files
+openapi_temp.json
+openapi_test.json
+run_example.py
+start_server.*
+
+# Model source (already copied into image)
+# (included intentionally — XGBoost weights are needed at runtime)

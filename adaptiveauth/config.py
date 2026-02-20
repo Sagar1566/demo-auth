@@ -77,13 +77,18 @@ class AdaptiveAuthSettings(BaseSettings):
 
 
 class RiskFactorWeights(BaseSettings):
-    """Configuration for risk factor weights in risk assessment."""
+    """Configuration for risk factor weights in risk assessment.
     
-    DEVICE_WEIGHT: float = Field(default=25.0, description="Weight for device factor")
-    LOCATION_WEIGHT: float = Field(default=25.0, description="Weight for location factor")
-    TIME_WEIGHT: float = Field(default=15.0, description="Weight for time factor")
-    VELOCITY_WEIGHT: float = Field(default=20.0, description="Weight for velocity factor")
-    BEHAVIOR_WEIGHT: float = Field(default=15.0, description="Weight for behavior factor")
+    Weights are learned from the trained XGBoost model (rba_xgb_model.json).
+    Trained on Kaggle RBA dataset (1.6M rows), ROC-AUC: 1.0.
+    Updated: 2026-02-20
+    """
+    
+    DEVICE_WEIGHT: float = Field(default=0.21, description="Weight for device factor (AI-learned)")
+    LOCATION_WEIGHT: float = Field(default=97.68, description="Weight for location/IP factor (AI-learned)")
+    TIME_WEIGHT: float = Field(default=0.02, description="Weight for time factor (AI-learned)")
+    VELOCITY_WEIGHT: float = Field(default=2.08, description="Weight for velocity factor (AI-learned)")
+    BEHAVIOR_WEIGHT: float = Field(default=0.01, description="Weight for behavior factor (AI-learned)")
     
     class Config:
         env_prefix = "ADAPTIVEAUTH_RISK_"

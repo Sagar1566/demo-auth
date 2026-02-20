@@ -1,0 +1,23 @@
+{
+  "trained_at": "2026-02-20T20:25:07.626832",
+  "dataset": "kaggle:dasgroup/rba-dataset",
+  "rows_train": 1600000,
+  "rows_test": 400000,
+  "roc_auc": 1.0,
+  "n_features": 17,
+  "old_weights": {
+    "device": 25.0,
+    "location": 25.0,
+    "time": 15.0,
+    "velocity": 20.0,
+    "behavior": 15.0
+  },
+  "weights_applied_at": "2026-02-21T00:00:00.000000",
+  "learned_weights": {
+    "device": 0.20999999344348907,
+    "location": 97.68000030517578,
+    "time": 0.019999999552965164,
+    "velocity": 2.0799999237060547,
+    "behavior": 0.009999999776482582
+  }
+}

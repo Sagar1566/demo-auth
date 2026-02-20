@@ -1,0 +1,19 @@
+{
+  "is_attack_ip": 0.967225193977356,
+  "ip_failure_count": 0.019231485202908516,
+  "country_freq": 0.00756910489872098,
+  "asn_risk": 0.0019815003033727407,
+  "is_bot": 0.0013159684604033828,
+  "ip_attempt_count": 0.0009205246460624039,
+  "device_type": 0.0007694000960327685,
+  "user_recent_failures": 0.0006265112315304577,
+  "login_hour": 9.224589302903041e-05,
+  "rtt_zscore": 5.906149817747064e-05,
+  "user_success_rate": 5.211737152421847e-05,
+  "is_new_country": 5.003463229513727e-05,
+  "is_new_browser": 4.279694985598326e-05,
+  "login_day": 2.7936024707742035e-05,
+  "is_late_night": 2.1642506908392534e-05,
+  "is_weekend": 1.440843607269926e-05,
+  "is_unknown_device": 0.0
+}

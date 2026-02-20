@@ -1,0 +1,19 @@
+[
+  "device_type",
+  "is_bot",
+  "is_unknown_device",
+  "is_new_browser",
+  "is_attack_ip",
+  "is_new_country",
+  "country_freq",
+  "asn_risk",
+  "login_hour",
+  "login_day",
+  "is_late_night",
+  "is_weekend",
+  "user_recent_failures",
+  "ip_attempt_count",
+  "ip_failure_count",
+  "rtt_zscore",
+  "user_success_rate"
+]
