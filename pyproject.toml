@@ -1,0 +1,84 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "adaptiveauth"
+version = "1.0.0"
+description = "Production-ready Adaptive Authentication Framework with Risk-Based Security"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "AdaptiveAuth Team", email = "team@adaptiveauth.dev"}
+]
+keywords = [
+    "authentication",
+    "fastapi",
+    "jwt",
+    "2fa",
+    "risk-based-authentication",
+    "adaptive-security",
+    "mfa",
+    "security"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Framework :: FastAPI",
+    "Topic :: Security",
+    "Topic :: Internet :: WWW/HTTP :: Session"
+]
+requires-python = ">=3.9"
+dependencies = [
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "sqlalchemy>=2.0.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "bcrypt>=4.1.2",
+    "python-multipart>=0.0.6",
+    "pyotp>=2.9.0",
+    "qrcode[pil]>=7.4.2",
+    "fastapi-mail>=1.4.1",
+    "httpx>=0.25.0",
+    "python-dateutil>=2.8.2",
+    "user-agents>=2.2.0",
+    "aiofiles>=23.2.1"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "httpx>=0.25.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "mypy>=1.5.0"
+]
+geoip = ["geoip2>=4.7.0"]
+
+[project.urls]
+Homepage = "https://github.com/adaptiveauth/adaptiveauth"
+Documentation = "https://adaptiveauth.dev/docs"
+Repository = "https://github.com/adaptiveauth/adaptiveauth"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["adaptiveauth*"]
+
+[tool.black]
+line-length = 100
+target-version = ['py39', 'py310', 'py311', 'py312']
+
+[tool.isort]
+profile = "black"
+line_length = 100

@@ -1,0 +1,18 @@
+# AdaptiveAuth Framework - Production Dependencies
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+sqlalchemy>=2.0.0
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+bcrypt>=4.1.2
+python-multipart>=0.0.6
+pyotp>=2.9.0
+qrcode[pil]>=7.4.2
+fastapi-mail>=1.4.1
+httpx>=0.25.0
+python-dateutil>=2.8.2
+user-agents>=2.2.0
+geoip2>=4.7.0
+aiofiles>=23.2.1
