@@ -243,6 +243,44 @@ class AdaptiveAuth:
             
             return user
     
+    def ensure_admin_user(self, email: str = "admin@adaptiveauth.com", password: str = "Admin@123") -> User:
+        """
+        Ensure an admin user exists, creating one if it doesn't.
+        
+        Args:
+            email: Admin email address
+            password: Admin password
+        
+        Returns:
+            Admin User object
+        """
+        with self.db_manager.session_scope() as db:
+            # Check if admin user exists
+            admin = db.query(User).filter(
+                User.email == email,
+                User.role == UserRole.ADMIN.value
+            ).first()
+            
+            if not admin:
+                print(f"Creating admin user: {email}")
+                admin = User(
+                    email=email,
+                    password_hash=hash_password(password),
+                    full_name="Admin User",
+                    role=UserRole.ADMIN.value,
+                    is_active=True,
+                    is_verified=True
+                )
+                
+                db.add(admin)
+                db.commit()
+                # Don't refresh since we're returning from the session scope
+                print(f"Admin user created successfully!")
+            else:
+                print(f"Admin user already exists: {email}")
+            
+            return admin
+    
     def get_auth_service(self, db) -> AuthService:
         """Get AuthService instance with database session."""
         return AuthService(db)

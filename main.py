@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from adaptiveauth import AdaptiveAuth, get_current_user, require_admin, User
+from adaptiveauth.core.middleware import setup_framework_tracking
 import uvicorn
 import os
 
@@ -30,6 +31,18 @@ auth = AdaptiveAuth(
     enable_session_monitoring=True,
     cors_origins=["*"]  # Configure appropriately for production
 )
+
+# Setup framework usage tracking middleware
+setup_framework_tracking(app)
+
+# Ensure admin user exists
+try:
+    admin_user = auth.ensure_admin_user(
+        email="admin@adaptiveauth.com",
+        password="Admin@123"
+    )
+except Exception as e:
+    print(f"Could not ensure admin user: {e}")
 
 # Mount static files (before auth routes)
 static_path = os.path.join(BASE_DIR, "static")
@@ -87,6 +100,6 @@ if __name__ == "__main__":
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
-        port=int(os.getenv("PORT", 8000)),
+        port=int(os.getenv("PORT", 8080)),  # Changed to 8080 to avoid port conflicts
         reload=False  # Set to False in production
     )

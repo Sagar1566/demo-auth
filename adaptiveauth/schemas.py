@@ -355,3 +355,29 @@ class RiskStatistics(BaseModel):
     blocked_attempts: int
     average_risk_score: float
     risk_distribution: Dict[str, int]  # {low: X, medium: X, high: X, critical: X}
+
+
+# ======================== FRAMEWORK USAGE SCHEMAS ========================
+
+class FrameworkUsageResponse(BaseModel):
+    """Framework usage record."""
+    id: int
+    client_ip: str
+    user_agent: str
+    endpoint_accessed: str
+    method: str
+    timestamp: datetime
+    risk_score: float
+    is_anomalous: bool
+    anomaly_description: Optional[str]
+    
+    class Config:
+        from_attributes = True
+
+
+class FrameworkUsageList(BaseModel):
+    """List of framework usage records."""
+    usages: List[FrameworkUsageResponse]
+    total: int
+    page: int
+    page_size: int

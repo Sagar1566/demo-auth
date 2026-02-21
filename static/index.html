@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AdaptiveAuth Framework Test Interface</title>
+    
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- PDF generation library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -175,6 +183,253 @@
             border-radius: 5px;
             overflow-x: auto;
         }
+        
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        
+        /* Professional UI Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            background: white;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+        
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            background: #e9ecef;
+            border: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #495057;
+        }
+        
+        .tab:hover {
+            background: #dee2e6;
+            transform: translateY(-2px);
+        }
+        
+        .tab.active {
+            background: #007bff;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #007bff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .feature-card h3 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .btn-primary { background: #007bff; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-info { background: #17a2b8; color: white; }
+        .btn-warning { background: #ffc107; color: #212529; }
+        .btn-danger { background: #dc3545; color: white; }
+        
+        .response {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+        }
+        
+        .response.success {
+            background: #d4edda;
+            border-left-color: #28a745;
+            color: #155724;
+        }
+        
+        .response.error {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+            color: #721c24;
+        }
+        
+        .response-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 5px 0;
+            border: 1px solid #e9ecef;
+        }
+        
+        .security-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .badge-level-0 { background: #28a745; color: white; }
+        .badge-level-1 { background: #28a745; color: white; }
+        .badge-level-2 { background: #ffc107; color: #212529; }
+        .badge-level-3 { background: #fd7e14; color: white; }
+        .badge-level-4 { background: #dc3545; color: white; }
+        
+        .icon {
+            font-size: 20px;
+            margin-right: 5px;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .status-active { background: #28a745; }
+        .status-inactive { background: #dc3545; }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #7f8c8d;
+        }
     </style>
 </head>
 <body>
@@ -207,6 +462,7 @@
         <div class="nav-tabs">
             <div class="tab active" onclick="showTab('register')">1. Register</div>
             <div class="tab" onclick="showTab('login')">2. Login</div>
+            <div class="tab" onclick="showTab('forgot')">📧 Password</div>
             <div class="tab" onclick="showTab('adaptive')">3. Adaptive</div>
             <div class="tab" onclick="showTab('demo')">4. Risk Demo</div>
             <div class="tab" onclick="showTab('user')">5. User</div>
@@ -250,7 +506,88 @@
                     <input type="password" id="loginPassword" placeholder="Enter password">
                 </div>
                 <button onclick="loginUser()">Login User</button>
+                <div style="margin-top: 10px; text-align: center;">
+                    <a href="#" onclick="showTab('forgot')" style="color: #3498db; font-size: 14px;">Forgot Password?</a>
+                </div>
                 <div id="loginResponse" class="response"></div>
+            </div>
+        </div>
+        
+        <!-- Forgot Password / Email Verification Tab -->
+        <div id="forgotTab" class="tab-content">
+            <div class="section">
+                <h2>📧 Email Verification & Password Reset</h2>
+                <p style="background: #e7f3ff; padding: 10px; border-radius: 5px; border-left: 4px solid #2196F3; font-size: 14px;">
+                    Manage email verification, password reset, and SMS verification
+                </p>
+                
+                <div class="feature-grid">
+                    <!-- Forgot Password -->
+                    <div class="feature-card" style="border-left: 4px solid #f44336;">
+                        <h3>🔑 Forgot Password</h3>
+                        <p>Request password reset via email</p>
+                        <div class="form-group">
+                            <label>Email:</label>
+                            <input type="email" id="forgotEmail" placeholder="your@email.com">
+                        </div>
+                        <button onclick="requestPasswordReset()" class="btn-warning">Send Reset Code</button>
+                        <div id="forgotResponse" class="response"></div>
+                    </div>
+                    
+                    <!-- Reset Password with Code -->
+                    <div class="feature-card" style="border-left: 4px solid #4CAF50;">
+                        <h3>🆕 Reset Password</h3>
+                        <p>Enter code and set new password</p>
+                        <div class="form-group">
+                            <label>Email:</label>
+                            <input type="email" id="resetEmail" placeholder="your@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Reset Code:</label>
+                            <input type="text" id="resetCode" placeholder="Enter code from email">
+                        </div>
+                        <div class="form-group">
+                            <label>New Password:</label>
+                            <input type="password" id="newResetPassword" placeholder="New password">
+                        </div>
+                        <button onclick="confirmPasswordReset()" class="btn-success">Reset Password</button>
+                        <div id="resetResponse" class="response"></div>
+                    </div>
+                    
+                    <!-- Email Verification -->
+                    <div class="feature-card" style="border-left: 4px solid #2196F3;">
+                        <h3>✉️ Verify Email</h3>
+                        <p>Verify your email address</p>
+                        <div class="form-group">
+                            <label>Email:</label>
+                            <input type="email" id="verifyEmail" placeholder="your@email.com">
+                        </div>
+                        <button onclick="requestEmailVerification()" class="btn-info">Send Verification</button>
+                        <div style="margin-top: 10px;">
+                            <label>Verification Code:</label>
+                            <input type="text" id="emailVerifyCode" placeholder="Enter 6-digit code">
+                        </div>
+                        <button onclick="confirmEmailVerification()" class="btn-success" style="margin-top: 5px;">Verify Email</button>
+                        <div id="emailVerifyResponse" class="response"></div>
+                    </div>
+                    
+                    <!-- SMS Verification (Placeholder) -->
+                    <div class="feature-card" style="border-left: 4px solid #9C27B0;">
+                        <h3>📱 SMS Verification</h3>
+                        <p>Verify via SMS (requires Twilio setup)</p>
+                        <div class="form-group">
+                            <label>Phone Number:</label>
+                            <input type="tel" id="smsPhone" placeholder="+1234567890">
+                        </div>
+                        <button onclick="requestSMSVerification()" class="btn-info">Send SMS Code</button>
+                        <div style="margin-top: 10px;">
+                            <label>SMS Code:</label>
+                            <input type="text" id="smsCode" placeholder="Enter SMS code">
+                        </div>
+                        <button onclick="confirmSMSVerification()" class="btn-success" style="margin-top: 5px;">Verify SMS</button>
+                        <div id="smsVerifyResponse" class="response"></div>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -411,7 +748,11 @@
         <!-- Protected Access Tab -->
         <div id="protectedTab" class="tab-content">
             <div class="section">
-                <h2>Protected Endpoints</h2>
+                <h2>Protected Endpoints & Live Session Monitoring</h2>
+                <p style="background: #e7f3ff; padding: 10px; border-radius: 5px; border-left: 4px solid #2196F3;">
+                    <strong>Continuous Verification:</strong> Each access verifies your session risk level in real-time
+                </p>
+                
                 <div class="feature-grid">
                     <div class="feature-card">
                         <h3>Basic Protected</h3>
@@ -424,6 +765,49 @@
                         <p>Test admin role access (requires admin token)</p>
                         <button onclick="accessAdminProtected()" class="btn-warning">Test Admin Access</button>
                         <div id="adminProtectedResponse" class="response"></div>
+                    </div>
+                    <div class="feature-card" style="border: 2px solid #9C27B0;">
+                        <h3>🔴 Live Session Monitor</h3>
+                        <p>Real-time session risk monitoring</p>
+                        <div id="liveSessionStatus" style="padding: 10px; background: #f5f5f5; border-radius: 5px; margin-bottom: 10px;">
+                            <div style="text-align: center; color: #666;">Click "Start Monitoring" to begin</div>
+                        </div>
+                        <button onclick="startLiveMonitoring()" class="btn-info">Start Monitoring</button>
+                        <button onclick="stopLiveMonitoring()" class="btn-danger" style="margin-top: 5px;">Stop</button>
+                        <div id="liveMonitorLog" class="response" style="margin-top: 10px; max-height: 200px; overflow-y: auto;"></div>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Step-Up Challenge</h3>
+                        <p>Request additional verification when risk increases</p>
+                        <button onclick="requestStepUp()" class="btn-warning">Request Step-Up</button>
+                        <div id="stepUpResponse" class="response"></div>
+                    </div>
+                    <div class="feature-card" style="border: 2px solid #FF5722; background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);">
+                        <h3>🧠 Behavioral Biometrics</h3>
+                        <p>AI-powered human/bot detection based on typing & mouse patterns</p>
+                        
+                        <div id="behaviorStatus" style="padding: 10px; background: #f5f5f5; border-radius: 5px; margin-bottom: 10px; text-align: center;">
+                            <div style="font-size: 12px; color: #666;">Start typing or moving mouse to analyze</div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 10px;">
+                            <div style="background: white; padding: 8px; border-radius: 5px; text-align: center;">
+                                <div style="font-size: 10px; color: #666;">HUMAN SCORE</div>
+                                <div id="humanScore" style="font-size: 24px; font-weight: bold; color: #4CAF50;">--</div>
+                            </div>
+                            <div style="background: white; padding: 8px; border-radius: 5px; text-align: center;">
+                                <div style="font-size: 10px; color: #666;">CONFIDENCE</div>
+                                <div id="confidenceScore" style="font-size: 24px; font-weight: bold; color: #2196F3;">--</div>
+                            </div>
+                        </div>
+                        
+                        <div id="behaviorIndicators" style="font-size: 11px; color: #666; margin-bottom: 10px;"></div>
+                        
+                        <button onclick="startBehaviorMonitoring()" class="btn-success" style="font-size: 12px;">Start Behavior Monitor</button>
+                        <button onclick="stopBehaviorMonitoring()" class="btn-danger" style="font-size: 12px; margin-top: 5px;">Stop</button>
+                        <button onclick="getBehaviorDetails()" class="btn-info" style="font-size: 12px; margin-top: 5px;">View Details</button>
+                        
+                        <div id="behaviorDetails" class="response" style="margin-top: 10px; font-size: 11px;"></div>
                     </div>
                 </div>
             </div>
@@ -505,6 +889,46 @@
                         </div>
                         <div id="userActionResponse" class="response"></div>
                     </div>
+                    <div class="feature-card">
+                        <h3>Data Export</h3>
+                        <div class="btn-group">
+                            <button onclick="exportUsers()" class="btn-success" style="flex: 1;">Export Users</button>
+                            <button onclick="exportSessions()" class="btn-info" style="flex: 1;">Export Sessions</button>
+                        </div>
+                        <div class="btn-group" style="margin-top: 5px;">
+                            <button onclick="exportRiskEvents()" class="btn-warning" style="flex: 1;">Export Risk Events</button>
+                            <button onclick="exportAnomalies()" class="btn-danger" style="flex: 1;">Export Anomalies</button>
+                        </div>
+                        <div id="exportResponse" class="response"></div>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Framework Usage Analytics</h3>
+                        <div class="btn-group">
+                            <button onclick="getFrameworkStatistics()" class="btn-success" style="flex: 1;">Usage Stats</button>
+                            <button onclick="getFrameworkUsages()" class="btn-info" style="flex: 1;">All Usage</button>
+                        </div>
+                        <div class="btn-group" style="margin-top: 5px;">
+                            <button onclick="getFrameworkAnomalies()" class="btn-warning" style="flex: 1;">Anomalies</button>
+                            <button onclick="exportFrameworkUsages()" class="btn-danger" style="flex: 1;">Export Usages</button>
+                        </div>
+                        <div id="frameworkResponse" class="response"></div>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Analytics & Charts</h3>
+                        <div class="btn-group">
+                            <button onclick="loadUserAnalytics()" class="btn-success" style="flex: 1;">Load User Analytics</button>
+                            <button onclick="loadRiskAnalytics()" class="btn-warning" style="flex: 1;">Load Risk Analytics</button>
+                        </div>
+                        <div class="btn-group" style="margin-top: 5px;">
+                            <button onclick="generatePDFReport()" class="btn-primary" style="flex: 1;">Generate PDF Report</button>
+                            <button onclick="generateCSVReport()" class="btn-info" style="flex: 1;">Generate CSV Report</button>
+                        </div>
+                        <div id="analyticsContainer" style="margin-top: 15px;">
+                            <canvas id="userChart" width="400" height="200" style="display: none;"></canvas>
+                            <canvas id="riskChart" width="400" height="200" style="display: none;"></canvas>
+                            <div id="analyticsResponse" class="response"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -554,8 +978,8 @@
     </div>
 
     <script>
-        const API_BASE = 'http://localhost:8000/api/v1';
-        const AUTH_API_BASE = 'http://localhost:8000/api/v1/auth';
+        const API_BASE = 'http://localhost:8080/api/v1';
+        const AUTH_API_BASE = 'http://localhost:8080/api/v1/auth';
 
         // Tab switching functionality
         function showTab(tabName) {
@@ -624,12 +1048,14 @@
                 const result = await response.json();
                 
                 if (!response.ok) {
-                    throw new Error(result.detail || `HTTP error! status: ${response.status}`);
+                    // Return both error and response status
+                    return { success: false, error: result.detail || `HTTP error! status: ${response.status}`, response: { status: response.status } };
                 }
                 
-                return { success: true, data: result };
+                return { success: true, data: result, response: { status: response.status } };
             } catch (error) {
-                return { success: false, error: error.message };
+                // Network error or other issue
+                return { success: false, error: error.message, response: { status: null } };
             }
         }
 
@@ -920,6 +1346,421 @@
             const result = await apiRequest(`${API_BASE}/protected`);
             displayResponse('protectedResponse', result);
         }
+
+        // ============ LIVE SESSION MONITORING ============
+        let monitoringInterval = null;
+        let monitoringStartTime = null;
+
+        async function startLiveMonitoring() {
+            if (monitoringInterval) {
+                alert('Monitoring already active!');
+                return;
+            }
+
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                alert('Please login first to monitor session');
+                return;
+            }
+
+            monitoringStartTime = new Date();
+            const logDiv = document.getElementById('liveMonitorLog');
+            const statusDiv = document.getElementById('liveSessionStatus');
+            
+            logDiv.innerHTML = '<div style="color: #2196F3;">🔴 Live monitoring started...</div>';
+            
+            // Update status indicator
+            statusDiv.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <span style="width: 12px; height: 12px; background: #f44336; border-radius: 50%; animation: pulse 1s infinite;"></span>
+                    <span style="color: #f44336; font-weight: bold;">LIVE MONITORING ACTIVE</span>
+                </div>
+                <div style="text-align: center; font-size: 12px; color: #666; margin-top: 5px;">
+                    Started: ${monitoringStartTime.toLocaleTimeString()}
+                </div>
+            `;
+
+            // Check session every 5 seconds
+            monitoringInterval = setInterval(async () => {
+                await checkSessionStatus();
+            }, 5000);
+
+            // First check immediately
+            await checkSessionStatus();
+        }
+
+        function stopLiveMonitoring() {
+            if (monitoringInterval) {
+                clearInterval(monitoringInterval);
+                monitoringInterval = null;
+                
+                const statusDiv = document.getElementById('liveSessionStatus');
+                const logDiv = document.getElementById('liveMonitorLog');
+                
+                statusDiv.innerHTML = `
+                    <div style="text-align: center; color: #666;">
+                        ⏹ Monitoring stopped<br>
+                        <small>Duration: ${getMonitoringDuration()}</small>
+                    </div>
+                `;
+                
+                logDiv.innerHTML += '<div style="color: #666; margin-top: 10px;">--- Monitoring stopped ---</div>';
+            }
+        }
+
+        function getMonitoringDuration() {
+            if (!monitoringStartTime) return '0s';
+            const diff = Math.floor((new Date() - monitoringStartTime) / 1000);
+            return `${diff}s`;
+        }
+
+        async function checkSessionStatus() {
+            const logDiv = document.getElementById('liveMonitorLog');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            try {
+                // Check protected endpoint (which validates session)
+                const result = await apiRequest(`${API_BASE}/protected`);
+                
+                if (result.success) {
+                    const riskLevel = result.data?.risk_level || 'low';
+                    const securityLevel = result.data?.security_level || 0;
+                    
+                    const riskColors = {
+                        'low': '#4CAF50',
+                        'medium': '#FF9800',
+                        'high': '#FF5722',
+                        'critical': '#f44336'
+                    };
+                    const color = riskColors[riskLevel] || '#4CAF50';
+                    
+                    const entry = document.createElement('div');
+                    entry.style.cssText = `padding: 8px; margin: 5px 0; border-left: 4px solid ${color}; background: #f8f9fa; border-radius: 3px; font-size: 13px;`;
+                    entry.innerHTML = `
+                        <strong>${timestamp}</strong> - 
+                        <span style="color: ${color};">Risk: ${riskLevel.toUpperCase()}</span> | 
+                        Level: ${securityLevel} | 
+                        <span style="color: #4CAF50;">✓ Session Valid</span>
+                    `;
+                    
+                    logDiv.insertBefore(entry, logDiv.firstChild);
+                    
+                    // Keep only last 20 entries
+                    while (logDiv.children.length > 20) {
+                        logDiv.removeChild(logDiv.lastChild);
+                    }
+                } else {
+                    const entry = document.createElement('div');
+                    entry.style.cssText = 'padding: 8px; margin: 5px 0; border-left: 4px solid #f44336; background: #ffebee; border-radius: 3px; font-size: 13px;';
+                    entry.innerHTML = `
+                        <strong>${timestamp}</strong> - 
+                        <span style="color: #f44336;">⚠ Session Issue: ${result.error}</span>
+                    `;
+                    logDiv.insertBefore(entry, logDiv.firstChild);
+                }
+            } catch (error) {
+                const entry = document.createElement('div');
+                entry.style.cssText = 'padding: 8px; margin: 5px 0; border-left: 4px solid #f44336; background: #ffebee; border-radius: 3px; font-size: 13px;';
+                entry.innerHTML = `
+                    <strong>${timestamp}</strong> - 
+                    <span style="color: #f44336;">❌ Error: ${error.message}</span>
+                `;
+                logDiv.insertBefore(entry, logDiv.firstChild);
+            }
+        }
+
+        async function requestStepUp() {
+            const logDiv = document.getElementById('stepUpResponse');
+            logDiv.innerHTML = '<div style="padding: 15px; background: #fff3cd; border-radius: 5px;">' +
+                '<h4 style="margin: 0 0 10px 0;">Step-Up Authentication Triggered</h4>' +
+                '<p style="margin: 0;">When risk level increases during a session, the system automatically requests additional verification.</p>' +
+                '<ul style="margin: 10px 0;">' +
+                '<li>Level 0→1: Password confirmation</li>' +
+                '<li>Level 1→2: Email verification</li>' +
+                '<li>Level 2→3: 2FA required</li>' +
+                '<li>Level 3→4: Access blocked</li>' +
+                '</ul>' +
+                '<p style="margin: 0; font-size: 12px; color: #666;">Try accessing protected resources from a different device/IP to trigger step-up.</p>' +
+                '</div>';
+        }
+
+        // ============ END LIVE SESSION MONITORING ============
+
+        // ============ BEHAVIORAL BIOMETRICS ============
+        let behaviorInterval = null;
+        let behaviorTrackingActive = false;
+        let keystrokeBuffer = [];
+        let mouseBuffer = [];
+
+        function startBehaviorMonitoring() {
+            if (behaviorTrackingActive) {
+                alert('Behavior monitoring already active!');
+                return;
+            }
+
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                alert('Please login first to enable behavior monitoring');
+                return;
+            }
+
+            behaviorTrackingActive = true;
+            
+            // Add event listeners
+            document.addEventListener('keydown', handleKeystroke);
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('click', handleMouseClick);
+            
+            // Start sending data every 2 seconds
+            behaviorInterval = setInterval(sendBehaviorData, 2000);
+            
+            // Start UI updates
+            updateBehaviorUI();
+            
+            document.getElementById('behaviorStatus').innerHTML = 
+                '<span style="color: #4CAF50; font-weight: bold;">🟢 Monitoring Active</span><br>' +
+                '<small>Type or move mouse to analyze</small>';
+        }
+
+        function stopBehaviorMonitoring() {
+            behaviorTrackingActive = false;
+            
+            // Remove event listeners
+            document.removeEventListener('keydown', handleKeystroke);
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('click', handleMouseClick);
+            
+            // Clear intervals
+            if (behaviorInterval) {
+                clearInterval(behaviorInterval);
+                behaviorInterval = null;
+            }
+            
+            document.getElementById('behaviorStatus').innerHTML = 
+                '<span style="color: #666;">⏹ Monitoring Stopped</span>';
+        }
+
+        function handleKeystroke(e) {
+            if (!behaviorTrackingActive) return;
+            
+            keystrokeBuffer.push({
+                key: e.key,
+                timestamp: Date.now() / 1000,
+                field_id: e.target.id || e.target.name || 'unknown'
+            });
+            
+            // Keep buffer size manageable
+            if (keystrokeBuffer.length > 50) {
+                keystrokeBuffer.shift();
+            }
+        }
+
+        let lastMouseTime = 0;
+        function handleMouseMove(e) {
+            if (!behaviorTrackingActive) return;
+            
+            // Throttle to every 50ms
+            const now = Date.now();
+            if (now - lastMouseTime < 50) return;
+            lastMouseTime = now;
+            
+            mouseBuffer.push({
+                type: 'move',
+                x: e.clientX,
+                y: e.clientY,
+                timestamp: now / 1000
+            });
+            
+            // Keep buffer size manageable
+            if (mouseBuffer.length > 100) {
+                mouseBuffer.shift();
+            }
+        }
+
+        function handleMouseClick(e) {
+            if (!behaviorTrackingActive) return;
+            
+            mouseBuffer.push({
+                type: 'click',
+                x: e.clientX,
+                y: e.clientY,
+                button: e.button === 0 ? 'left' : 'right',
+                timestamp: Date.now() / 1000
+            });
+        }
+
+        async function sendBehaviorData() {
+            const token = localStorage.getItem('authToken');
+            if (!token) return;
+
+            // Send keystrokes
+            if (keystrokeBuffer.length > 0) {
+                for (const keystroke of keystrokeBuffer) {
+                    try {
+                        await fetch(`${API_BASE}/adaptive/behavior/keystroke`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: JSON.stringify(keystroke)
+                        });
+                    } catch (e) {
+                        // Silent fail
+                    }
+                }
+                keystrokeBuffer = [];
+            }
+
+            // Send mouse events
+            if (mouseBuffer.length > 0) {
+                for (const mouseEvent of mouseBuffer) {
+                    try {
+                        await fetch(`${API_BASE}/adaptive/behavior/mouse`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: JSON.stringify(mouseEvent)
+                        });
+                    } catch (e) {
+                        // Silent fail
+                    }
+                }
+                mouseBuffer = [];
+            }
+
+            // Update UI with latest status
+            await updateBehaviorUI();
+        }
+
+        async function updateBehaviorUI() {
+            const token = localStorage.getItem('authToken');
+            if (!token) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/adaptive/behavior/status`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Update human score
+                    const humanScoreEl = document.getElementById('humanScore');
+                    humanScoreEl.textContent = Math.round(data.human_score) + '%';
+                    
+                    // Color based on score
+                    if (data.human_score >= 70) {
+                        humanScoreEl.style.color = '#4CAF50';
+                    } else if (data.human_score >= 40) {
+                        humanScoreEl.style.color = '#FF9800';
+                    } else {
+                        humanScoreEl.style.color = '#f44336';
+                    }
+                    
+                    // Update confidence
+                    document.getElementById('confidenceScore').textContent = Math.round(data.confidence) + '%';
+                    
+                    // Update status
+                    const statusEl = document.getElementById('behaviorStatus');
+                    if (data.is_suspicious) {
+                        statusEl.innerHTML = 
+                            '<span style="color: #f44336; font-weight: bold;">⚠️ BOT-LIKE BEHAVIOR</span><br>' +
+                            '<small>' + (data.risk_adjustment?.message || 'Suspicious patterns detected') + '</small>';
+                    } else if (data.is_likely_human) {
+                        statusEl.innerHTML = 
+                            '<span style="color: #4CAF50; font-weight: bold;">✓ HUMAN USER</span><br>' +
+                            '<small>' + (data.risk_adjustment?.message || 'Behavior consistent with human') + '</small>';
+                    }
+                    
+                    // Update indicators
+                    const indicatorsEl = document.getElementById('behaviorIndicators');
+                    if (data.bot_indicators && data.bot_indicators.length > 0) {
+                        indicatorsEl.innerHTML = '<strong>Detected:</strong> ' + data.bot_indicators.join(', ');
+                    } else if (data.typing || data.mouse) {
+                        const typing = data.typing || {};
+                        const mouse = data.mouse || {};
+                        indicatorsEl.innerHTML = 
+                            'Speed: ' + Math.round(typing.speed_cpm || 0) + ' CPM | ' +
+                            'Backspaces: ' + (typing.backspaces || 0) + ' | ' +
+                            'Mouse curve: ' + Math.round(mouse.curvature || 0) + '°';
+                    }
+                }
+            } catch (e) {
+                console.log('Behavior update error:', e);
+            }
+        }
+
+        async function getBehaviorDetails() {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                alert('Please login first');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/adaptive/behavior/status`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    let html = '<div style="background: #f8f9fa; padding: 10px; border-radius: 5px;">';
+                    html += '<h4 style="margin: 0 0 10px 0;">Behavior Analysis Details</h4>';
+                    
+                    html += '<div style="margin-bottom: 10px;">';
+                    html += '<strong>Overall Human Score:</strong> ' + Math.round(data.human_score) + '%<br>';
+                    html += '<strong>Confidence:</strong> ' + Math.round(data.confidence) + '%<br>';
+                    html += '<strong>Status:</strong> ' + (data.is_likely_human ? '✓ Human' : '⚠️ Suspicious') + '<br>';
+                    html += '</div>';
+                    
+                    if (data.typing) {
+                        html += '<div style="background: white; padding: 8px; border-radius: 3px; margin-bottom: 8px;">';
+                        html += '<strong>📝 Typing Analysis</strong><br>';
+                        html += 'Speed: ' + Math.round(data.typing.speed_cpm) + ' chars/min<br>';
+                        html += 'Human Score: ' + Math.round(data.typing.human_score) + '%<br>';
+                        html += 'Backspaces: ' + data.typing.backspaces + '<br>';
+                        html += 'Consistency: ' + Math.round(data.typing.consistency) + '%<br>';
+                        html += '</div>';
+                    }
+                    
+                    if (data.mouse) {
+                        html += '<div style="background: white; padding: 8px; border-radius: 3px; margin-bottom: 8px;">';
+                        html += '<strong>🖱️ Mouse Analysis</strong><br>';
+                        html += 'Avg Speed: ' + Math.round(data.mouse.avg_speed) + '<br>';
+                        html += 'Human Score: ' + Math.round(data.mouse.human_score) + '%<br>';
+                        html += 'Path Curvature: ' + Math.round(data.mouse.curvature) + '°<br>';
+                        html += 'Hesitation: ' + (data.mouse.hesitation * 1000).toFixed(1) + 'ms<br>';
+                        html += '</div>';
+                    }
+                    
+                    if (data.risk_adjustment) {
+                        html += '<div style="background: #fff3cd; padding: 8px; border-radius: 3px;">';
+                        html += '<strong>⚠️ Risk Impact</strong><br>';
+                        html += 'Action: ' + data.risk_adjustment.action + '<br>';
+                        html += 'Level Increase: +' + data.risk_adjustment.level_increase + '<br>';
+                        html += 'Message: ' + data.risk_adjustment.message + '<br>';
+                        html += '</div>';
+                    }
+                    
+                    html += '</div>';
+                    
+                    document.getElementById('behaviorDetails').innerHTML = html;
+                }
+            } catch (e) {
+                document.getElementById('behaviorDetails').innerHTML = 
+                    '<div style="color: #f44336;">Error fetching behavior data</div>';
+            }
+        }
+
+        // ============ END BEHAVIORAL BIOMETRICS ============
 
         // Enable 2FA
         async function enable2FA() {
@@ -1311,6 +2152,208 @@
             }
         }
 
+        // ============ PASSWORD RESET & EMAIL VERIFICATION ============
+
+        async function requestPasswordReset() {
+            const email = document.getElementById('forgotEmail').value;
+            
+            if (!email) {
+                alert('Please enter your email address');
+                return;
+            }
+
+            const result = await apiRequest(`${AUTH_API_BASE}/forgot-password`, 'POST', { email }, false);
+            
+            if (result.success) {
+                displayResponse('forgotResponse', {
+                    success: true,
+                    data: {
+                        'Status': '✓ Reset Code Sent',
+                        'Message': 'Check your email for the password reset code',
+                        'Note': 'The code will expire in 15 minutes'
+                    }
+                });
+            } else {
+                displayResponse('forgotResponse', result);
+            }
+        }
+
+        async function confirmPasswordReset() {
+            const email = document.getElementById('resetEmail').value;
+            const code = document.getElementById('resetCode').value;
+            const newPassword = document.getElementById('newResetPassword').value;
+            
+            if (!email || !code || !newPassword) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (newPassword.length < 8) {
+                alert('Password must be at least 8 characters');
+                return;
+            }
+
+            const result = await apiRequest(`${AUTH_API_BASE}/reset-password`, 'POST', {
+                email: email,
+                reset_token: code,
+                new_password: newPassword
+            }, false);
+            
+            if (result.success) {
+                displayResponse('resetResponse', {
+                    success: true,
+                    data: {
+                        'Status': '✓ Password Reset Successful',
+                        'Message': 'You can now login with your new password',
+                        'Next Step': 'Go to Login tab and sign in'
+                    }
+                });
+                // Clear fields
+                document.getElementById('resetCode').value = '';
+                document.getElementById('newResetPassword').value = '';
+            } else {
+                displayResponse('resetResponse', result);
+            }
+        }
+
+        async function requestEmailVerification() {
+            const email = document.getElementById('verifyEmail').value;
+            
+            if (!email) {
+                alert('Please enter your email address');
+                return;
+            }
+
+            // Note: This endpoint might need to be added to backend
+            const result = await apiRequest(`${AUTH_API_BASE}/request-email-verification`, 'POST', { email }, false);
+            
+            if (result.success) {
+                displayResponse('emailVerifyResponse', {
+                    success: true,
+                    data: {
+                        'Status': '✓ Verification Email Sent',
+                        'Message': 'Check your email for the verification code',
+                        'Action': 'Enter the code below to verify'
+                    }
+                });
+            } else {
+                displayResponse('emailVerifyResponse', result);
+            }
+        }
+
+        async function confirmEmailVerification() {
+            const email = document.getElementById('verifyEmail').value;
+            const code = document.getElementById('emailVerifyCode').value;
+            
+            if (!email || !code) {
+                alert('Please enter email and verification code');
+                return;
+            }
+
+            const result = await apiRequest(`${AUTH_API_BASE}/verify-email`, 'POST', {
+                email: email,
+                code: code
+            }, false);
+            
+            if (result.success) {
+                displayResponse('emailVerifyResponse', {
+                    success: true,
+                    data: {
+                        'Status': '✓ Email Verified',
+                        'Message': 'Your email has been successfully verified',
+                        'Benefits': [
+                            'Access to all features',
+                            'Password recovery enabled',
+                            'Security notifications'
+                        ]
+                    }
+                });
+                document.getElementById('emailVerifyCode').value = '';
+            } else {
+                displayResponse('emailVerifyResponse', result);
+            }
+        }
+
+        async function requestSMSVerification() {
+            const phone = document.getElementById('smsPhone').value;
+            
+            if (!phone) {
+                alert('Please enter your phone number');
+                return;
+            }
+
+            const result = await apiRequest(`${AUTH_API_BASE}/request-sms`, 'POST', { phone }, false);
+            
+            if (result.success) {
+                displayResponse('smsVerifyResponse', {
+                    success: true,
+                    data: {
+                        'Status': '✓ SMS Sent',
+                        'Message': 'Check your phone for the verification code',
+                        'Phone': phone
+                    }
+                });
+            } else {
+                // Handle different error scenarios
+                if (result.response && result.response.status === 500) {
+                    // Check if it's a Twilio trial account issue
+                    if (result.error && result.error.includes('unverified')) {
+                        displayResponse('smsVerifyResponse', {
+                            success: false,
+                            data: {
+                                'Status': '⚠ SMS Trial Limitation',
+                                'Message': 'Twilio trial account - number not verified',
+                                'Details': [
+                                    'Trial accounts can only send SMS to verified numbers',
+                                    'Please verify your phone number in Twilio Console',
+                                    'Or purchase a Twilio number for full access',
+                                    'Phone entered: ' + phone
+                                ]
+                            }
+                        });
+                    } else {
+                        displayResponse('smsVerifyResponse', {
+                            success: false,
+                            data: {
+                                'Status': '⚠ SMS Service Issue',
+                                'Message': 'Failed to send SMS - please check Twilio configuration',
+                                'Details': 'Ensure Twilio Account SID, Auth Token, and Phone Number are configured correctly',
+                                'Phone': phone
+                            }
+                        });
+                    }
+                } else {
+                    displayResponse('smsVerifyResponse', {
+                        success: false,
+                        data: {
+                            'Status': '⚠ SMS Not Configured',
+                            'Message': 'Please configure Twilio in backend',
+                            'Phone': phone
+                        }
+                    });
+                }
+            }
+        }
+
+        async function confirmSMSVerification() {
+            const phone = document.getElementById('smsPhone').value;
+            const code = document.getElementById('smsCode').value;
+            
+            if (!phone || !code) {
+                alert('Please enter phone number and code');
+                return;
+            }
+
+            const result = await apiRequest(`${AUTH_API_BASE}/verify-sms`, 'POST', {
+                phone: phone,
+                code: code
+            }, false);
+            
+            displayResponse('smsVerifyResponse', result);
+        }
+
+        // ============ END PASSWORD RESET & EMAIL VERIFICATION ============
+
         // User Profile Functions
         async function getMyProfile() {
             const result = await apiRequest(`${API_BASE}/user/profile`);
@@ -1436,6 +2479,665 @@
         async function accessAdminProtected() {
             const result = await apiRequest(`${API_BASE}/admin-only`);
             displayResponse('adminProtectedResponse', result);
+        }
+
+        // Export Functions
+        async function exportUsers() {
+            try {
+                // Trigger download by creating a temporary link
+                const response = await fetch(`${API_BASE}/admin/export/users`);
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'users_export.csv';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    
+                    displayResponse('exportResponse', {
+                        success: true,
+                        data: {
+                            'Status': '✓ Export Complete',
+                            'Message': 'Users exported to users_export.csv',
+                            'Action': 'Check your downloads folder'
+                        }
+                    });
+                } else {
+                    const errorData = await response.json();
+                    displayResponse('exportResponse', {
+                        success: false,
+                        data: {
+                            'Status': '⚠ Export Failed',
+                            'Message': errorData.detail || 'Failed to export users',
+                            'Error': response.status
+                        }
+                    });
+                }
+            } catch (error) {
+                displayResponse('exportResponse', {
+                    success: false,
+                    data: {
+                        'Status': '⚠ Export Error',
+                        'Message': error.message
+                    }
+                });
+            }
+        }
+
+        async function exportSessions() {
+            try {
+                const response = await fetch(`${API_BASE}/admin/export/sessions`);
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'sessions_export.csv';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    
+                    displayResponse('exportResponse', {
+                        success: true,
+                        data: {
+                            'Status': '✓ Export Complete',
+                            'Message': 'Sessions exported to sessions_export.csv',
+                            'Action': 'Check your downloads folder'
+                        }
+                    });
+                } else {
+                    const errorData = await response.json();
+                    displayResponse('exportResponse', {
+                        success: false,
+                        data: {
+                            'Status': '⚠ Export Failed',
+                            'Message': errorData.detail || 'Failed to export sessions',
+                            'Error': response.status
+                        }
+                    });
+                }
+            } catch (error) {
+                displayResponse('exportResponse', {
+                    success: false,
+                    data: {
+                        'Status': '⚠ Export Error',
+                        'Message': error.message
+                    }
+                });
+            }
+        }
+
+        async function exportRiskEvents() {
+            try {
+                const response = await fetch(`${API_BASE}/admin/export/risk-events`);
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'risk_events_export.csv';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    
+                    displayResponse('exportResponse', {
+                        success: true,
+                        data: {
+                            'Status': '✓ Export Complete',
+                            'Message': 'Risk events exported to risk_events_export.csv',
+                            'Action': 'Check your downloads folder'
+                        }
+                    });
+                } else {
+                    const errorData = await response.json();
+                    displayResponse('exportResponse', {
+                        success: false,
+                        data: {
+                            'Status': '⚠ Export Failed',
+                            'Message': errorData.detail || 'Failed to export risk events',
+                            'Error': response.status
+                        }
+                    });
+                }
+            } catch (error) {
+                displayResponse('exportResponse', {
+                    success: false,
+                    data: {
+                        'Status': '⚠ Export Error',
+                        'Message': error.message
+                    }
+                });
+            }
+        }
+
+        async function exportAnomalies() {
+            try {
+                const response = await fetch(`${API_BASE}/admin/export/anomalies`);
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'anomalies_export.csv';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    
+                    displayResponse('exportResponse', {
+                        success: true,
+                        data: {
+                            'Status': '✓ Export Complete',
+                            'Message': 'Anomalies exported to anomalies_export.csv',
+                            'Action': 'Check your downloads folder'
+                        }
+                    });
+                } else {
+                    const errorData = await response.json();
+                    displayResponse('exportResponse', {
+                        success: false,
+                        data: {
+                            'Status': '⚠ Export Failed',
+                            'Message': errorData.detail || 'Failed to export anomalies',
+                            'Error': response.status
+                        }
+                    });
+                }
+            } catch (error) {
+                displayResponse('exportResponse', {
+                    success: false,
+                    data: {
+                        'Status': '⚠ Export Error',
+                        'Message': error.message
+                    }
+                });
+            }
+        }
+
+        // Analytics and Charts Functions
+        async function loadUserAnalytics() {
+            try {
+                const statsResult = await apiRequest(`${API_BASE}/admin/statistics`);
+                
+                if (statsResult.success) {
+                    const stats = statsResult.data;
+                    
+                    // Show the chart container
+                    document.getElementById('userChart').style.display = 'block';
+                    
+                    // Get canvas context
+                    const ctx = document.getElementById('userChart').getContext('2d');
+                    
+                    // Destroy existing chart if exists
+                    if (window.userChartInstance) {
+                        window.userChartInstance.destroy();
+                    }
+                    
+                    // Create new chart
+                    window.userChartInstance = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Total Users', 'Active Users', 'Blocked Users'],
+                            datasets: [{
+                                label: 'User Statistics',
+                                data: [stats.total_users, stats.active_users, stats.blocked_users],
+                                backgroundColor: [
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(255, 99, 132, 0.2)'
+                                ],
+                                borderColor: [
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(255, 99, 132, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                    
+                    displayResponse('analyticsResponse', {
+                        success: true,
+                        data: {
+                            'Status': '✓ Charts Loaded',
+                            'Message': 'User analytics chart displayed',
+                            'Details': [
+                                `Total Users: ${stats.total_users}`,
+                                `Active Users: ${stats.active_users}`,
+                                `Blocked Users: ${stats.blocked_users}`
+                            ]
+                        }
+                    });
+                } else {
+                    displayResponse('analyticsResponse', {
+                        success: false,
+                        data: {
+                            'Status': '⚠ Chart Error',
+                            'Message': 'Failed to load user statistics for chart'
+                        }
+                    });
+                }
+            } catch (error) {
+                displayResponse('analyticsResponse', {
+                    success: false,
+                    data: {
+                        'Status': '⚠ Chart Error',
+                        'Message': error.message
+                    }
+                });
+            }
+        }
+
+        async function loadRiskAnalytics() {
+            try {
+                const riskResult = await apiRequest(`${API_BASE}/admin/risk-statistics?period=day`);
+                
+                if (riskResult.success) {
+                    const stats = riskResult.data;
+                    
+                    // Show the chart container
+                    document.getElementById('riskChart').style.display = 'block';
+                    
+                    // Get canvas context
+                    const ctx = document.getElementById('riskChart').getContext('2d');
+                    
+                    // Destroy existing chart if exists
+                    if (window.riskChartInstance) {
+                        window.riskChartInstance.destroy();
+                    }
+                    
+                    // Prepare data for risk distribution
+                    const riskLevels = Object.keys(stats.risk_distribution);
+                    const riskCounts = Object.values(stats.risk_distribution);
+                    
+                    window.riskChartInstance = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: riskLevels.map(level => `Risk Level: ${level.toUpperCase()}`),
+                            datasets: [{
+                                label: 'Risk Distribution',
+                                data: riskCounts,
+                                backgroundColor: [
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(255, 205, 86, 0.2)',
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)'
+                                ],
+                                borderColor: [
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(255, 205, 86, 1)',
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom'
+                                }
+                            }
+                        }
+                    });
+                    
+                    displayResponse('analyticsResponse', {
+                        success: true,
+                        data: {
+                            'Status': '✓ Charts Loaded',
+                            'Message': 'Risk analytics chart displayed',
+                            'Details': [
+                                `Total Logins Today: ${stats.total_logins}`,
+                                `Successful Logins: ${stats.successful_logins}`,
+                                `Failed Logins: ${stats.failed_logins}`,
+                                `Average Risk Score: ${stats.average_risk_score}`
+                            ]
+                        }
+                    });
+                } else {
+                    displayResponse('analyticsResponse', {
+                        success: false,
+                        data: {
+                            'Status': '⚠ Chart Error',
+                            'Message': 'Failed to load risk statistics for chart'
+                        }
+                    });
+                }
+            } catch (error) {
+                displayResponse('analyticsResponse', {
+                    success: false,
+                    data: {
+                        'Status': '⚠ Chart Error',
+                        'Message': error.message
+                    }
+                });
+            }
+        }
+
+        async function generatePDFReport() {
+            try {
+                // Create PDF using jsPDF
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF();
+                
+                // Add title
+                pdf.setFontSize(20);
+                pdf.text('AdaptiveAuth Security Report', 20, 20);
+                
+                pdf.setFontSize(12);
+                pdf.text(`Generated on: ${new Date().toLocaleString()}`, 20, 30);
+                
+                // Get system stats
+                const statsResult = await apiRequest(`${API_BASE}/admin/statistics`);
+                if (statsResult.success) {
+                    const stats = statsResult.data;
+                    
+                    let yPos = 50;
+                    pdf.text('System Statistics:', 20, yPos);
+                    yPos += 10;
+                    pdf.text(`Total Users: ${stats.total_users}`, 30, yPos);
+                    yPos += 8;
+                    pdf.text(`Active Users: ${stats.active_users}`, 30, yPos);
+                    yPos += 8;
+                    pdf.text(`Blocked Users: ${stats.blocked_users}`, 30, yPos);
+                    yPos += 8;
+                    pdf.text(`Active Sessions: ${stats.active_sessions}`, 30, yPos);
+                    yPos += 15;
+                    
+                    // Add risk stats
+                    const riskResult = await apiRequest(`${API_BASE}/admin/risk-statistics?period=day`);
+                    if (riskResult.success) {
+                        const riskStats = riskResult.data;
+                        pdf.text('Risk Statistics:', 20, yPos);
+                        yPos += 10;
+                        pdf.text(`Logins Today: ${riskStats.total_logins}`, 30, yPos);
+                        yPos += 8;
+                        pdf.text(`Successful: ${riskStats.successful_logins}`, 30, yPos);
+                        yPos += 8;
+                        pdf.text(`Failed: ${riskStats.failed_logins}`, 30, yPos);
+                        yPos += 8;
+                        pdf.text(`Average Risk Score: ${riskStats.average_risk_score}`, 30, yPos);
+                        yPos += 15;
+                        
+                        // Add risk distribution
+                        pdf.text('Risk Distribution:', 20, yPos);
+                        yPos += 10;
+                        for (const [level, count] of Object.entries(riskStats.risk_distribution)) {
+                            pdf.text(`${level}: ${count}`, 30, yPos);
+                            yPos += 8;
+                        }
+                    }
+                }
+                
+                // Save the PDF
+                pdf.save('adaptiveauth-security-report.pdf');
+                
+                displayResponse('analyticsResponse', {
+                    success: true,
+                    data: {
+                        'Status': '✓ PDF Generated',
+                        'Message': 'Security report downloaded as PDF',
+                        'Action': 'Check your downloads folder'
+                    }
+                });
+            } catch (error) {
+                displayResponse('analyticsResponse', {
+                    success: false,
+                    data: {
+                        'Status': '⚠ PDF Error',
+                        'Message': error.message
+                    }
+                });
+            }
+        }
+
+        async function generateCSVReport() {
+            try {
+                // Fetch all data to create a comprehensive CSV report
+                const statsResult = await apiRequest(`${API_BASE}/admin/statistics`);
+                const riskResult = await apiRequest(`${API_BASE}/admin/risk-statistics?period=day`);
+                
+                let csvContent = "AdaptiveAuth Comprehensive Report\n\n";
+                
+                if (statsResult.success) {
+                    const stats = statsResult.data;
+                    csvContent += "System Statistics\n";
+                    csvContent += `Total Users,${stats.total_users}\n`;
+                    csvContent += `Active Users,${stats.active_users}\n`;
+                    csvContent += `Blocked Users,${stats.blocked_users}\n`;
+                    csvContent += `Active Sessions,${stats.active_sessions}\n`;
+                    csvContent += `\n`;
+                }
+                
+                if (riskResult.success) {
+                    const riskStats = riskResult.data;
+                    csvContent += "Risk Statistics\n";
+                    csvContent += `Total Logins,${riskStats.total_logins}\n`;
+                    csvContent += `Successful Logins,${riskStats.successful_logins}\n`;
+                    csvContent += `Failed Logins,${riskStats.failed_logins}\n`;
+                    csvContent += `Average Risk Score,${riskStats.average_risk_score}\n`;
+                    csvContent += `\n`;
+                    
+                    csvContent += "Risk Distribution\n";
+                    for (const [level, count] of Object.entries(riskStats.risk_distribution)) {
+                        csvContent += `${level},${count}\n`;
+                    }
+                    csvContent += `\n`;
+                }
+                
+                // Create and download CSV
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'adaptiveauth-comprehensive-report.csv';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+                
+                displayResponse('analyticsResponse', {
+                    success: true,
+                    data: {
+                        'Status': '✓ CSV Generated',
+                        'Message': 'Comprehensive report downloaded as CSV',
+                        'Action': 'Check your downloads folder'
+                    }
+                });
+            } catch (error) {
+                displayResponse('analyticsResponse', {
+                    success: false,
+                    data: {
+                        'Status': '⚠ CSV Error',
+                        'Message': error.message
+                    }
+                });
+            }
+        }
+
+        // Framework Usage Tracking Functions
+        async function getFrameworkStatistics() {
+            try {
+                const response = await apiRequest(`${API_BASE}/admin/framework-statistics`);
+                
+                if (response.success) {
+                    displayResponse('frameworkResponse', {
+                        success: true,
+                        data: {
+                            'Status': '✓ Framework Statistics',
+                            'Message': 'Framework usage statistics loaded',
+                            'Details': [
+                                `Total Usage: ${response.data.total_usage}`,
+                                `Total Anomalies: ${response.data.total_anomalies}`,
+                                `Unique IPs: ${response.data.unique_ips}`,
+                                `Unique Endpoints: ${response.data.unique_endpoints}`,
+                                `Usage Today: ${response.data.usage_today}`,
+                                `Anomalies Today: ${response.data.anomalies_today}`
+                            ],
+                            'Top Endpoints': response.data.top_endpoints.slice(0, 5).map(ep => `${ep.endpoint}: ${ep.count} accesses`),
+                            'Top IPs': response.data.top_ips.slice(0, 5).map(ip => `${ip.ip}: ${ip.count} accesses`)
+                        }
+                    });
+                } else {
+                    displayResponse('frameworkResponse', {
+                        success: false,
+                        data: {
+                            'Status': '⚠ Statistics Error',
+                            'Message': response.detail || 'Failed to load framework statistics'
+                        }
+                    });
+                }
+            } catch (error) {
+                displayResponse('frameworkResponse', {
+                    success: false,
+                    data: {
+                        'Status': '⚠ Statistics Error',
+                        'Message': error.message
+                    }
+                });
+            }
+        }
+
+        async function getFrameworkUsages() {
+            try {
+                const response = await apiRequest(`${API_BASE}/admin/framework-usages?page=1&page_size=10`);
+                
+                if (response.success) {
+                    const usages = response.data.usages;
+                    
+                    displayResponse('frameworkResponse', {
+                        success: true,
+                        data: {
+                            'Status': '✓ Framework Usages',
+                            'Message': `Showing ${usages.length} recent framework usage records`,
+                            'Records': usages.map(usage => {
+                                return `${usage.client_ip} - ${usage.method} ${usage.endpoint_accessed} (${usage.risk_score}) ${usage.is_anomalous ? '[ANOMALOUS]' : ''}`;
+                            })
+                        }
+                    });
+                } else {
+                    displayResponse('frameworkResponse', {
+                        success: false,
+                        data: {
+                            'Status': '⚠ Usage Error',
+                            'Message': response.detail || 'Failed to load framework usage records'
+                        }
+                    });
+                }
+            } catch (error) {
+                displayResponse('frameworkResponse', {
+                    success: false,
+                    data: {
+                        'Status': '⚠ Usage Error',
+                        'Message': error.message
+                    }
+                });
+            }
+        }
+
+        async function getFrameworkAnomalies() {
+            try {
+                const response = await apiRequest(`${API_BASE}/admin/framework-usages/anomalies?page=1&page_size=10`);
+                
+                if (response.success) {
+                    const anomalies = response.data.usages;
+                    
+                    displayResponse('frameworkResponse', {
+                        success: true,
+                        data: {
+                            'Status': '✓ Framework Anomalies',
+                            'Message': `Detected ${anomalies.length} anomalous usage patterns`,
+                            'Anomalies': anomalies.map(usage => {
+                                return `${usage.client_ip} - ${usage.method} ${usage.endpoint_accessed}: ${usage.anomaly_description || 'Unknown anomaly'}`;
+                            })
+                        }
+                    });
+                } else {
+                    displayResponse('frameworkResponse', {
+                        success: false,
+                        data: {
+                            'Status': '⚠ Anomalies Error',
+                            'Message': response.detail || 'Failed to load framework anomalies'
+                        }
+                    });
+                }
+            } catch (error) {
+                displayResponse('frameworkResponse', {
+                    success: false,
+                    data: {
+                        'Status': '⚠ Anomalies Error',
+                        'Message': error.message
+                    }
+                });
+            }
+        }
+
+        async function exportFrameworkUsages() {
+            try {
+                const response = await fetch(`${API_BASE}/admin/export/framework-usages`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'framework_usages_export.csv';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    
+                    displayResponse('frameworkResponse', {
+                        success: true,
+                        data: {
+                            'Status': '✓ Export Complete',
+                            'Message': 'Framework usage records exported to framework_usages_export.csv',
+                            'Action': 'Check your downloads folder'
+                        }
+                    });
+                } else {
+                    const errorData = await response.json();
+                    displayResponse('frameworkResponse', {
+                        success: false,
+                        data: {
+                            'Status': '⚠ Export Failed',
+                            'Message': errorData.detail || 'Failed to export framework usage records',
+                            'Error': response.status
+                        }
+                    });
+                }
+            } catch (error) {
+                displayResponse('frameworkResponse', {
+                    success: false,
+                    data: {
+                        'Status': '⚠ Export Error',
+                        'Message': error.message
+                    }
+                });
+            }
         }
 
         // Load token on page load

@@ -56,8 +56,22 @@ class EmailService:
     ) -> bool:
         """Send an email."""
         if not self.is_configured:
-            print("Email not configured. Skipping email send.")
-            return False
+            print("=" * 60)
+            print("📧 EMAIL NOT CONFIGURED - Printing to console instead")
+            print("=" * 60)
+            print(f"To: {to}")
+            print(f"Subject: {subject}")
+            print("-" * 60)
+            # Extract code from body if present
+            import re
+            code_match = re.search(r'class="code">(\d+)</div>', body)
+            if code_match:
+                print(f"🔑 VERIFICATION CODE: {code_match.group(1)}")
+                print("-" * 60)
+            print("Body preview (first 500 chars):")
+            print(body[:500])
+            print("=" * 60)
+            return True
         
         try:
             message = MessageSchema(

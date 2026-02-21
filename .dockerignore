@@ -1,0 +1,97 @@
+# SAGAR AdaptiveAuth Framework - Docker ignore file
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.coverage
+.pytest_cache/
+.covers/
+.venv/
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Documentation
+docs/_build/
+
+# Tests
+.test*
+.pytest_cache/
+
+# Distribution / packaging
+.pybuild/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Local development
+.env
+.local
+
+# Sensitive files
+*.key
+*.pem
+*.crt
+*.cert
+secrets/
+credentials/
+
+# Database
+*.db
+*.db-journal
+
+# Coverage
+htmlcov/
+.coverage*
+
+# MyPy
+.mypy_cache/
+
+# Black
+.blk*
+
+# Build
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Git
+.git/
+
+# Node modules (if any)
+node_modules/
+
+# Backup files
+*~
+*.bak
+*.tmp

@@ -5,6 +5,7 @@ Core authentication endpoints.
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 from typing import Optional
+from datetime import datetime, timedelta
 
 from ..core.database import get_db
 from ..core.dependencies import get_current_user, get_client_info
@@ -280,3 +281,189 @@ async def disable_2fa(
         )
     
     return {"message": "2FA has been disabled"}
+
+
+# ============ EMAIL & SMS VERIFICATION ENDPOINTS ============
+
+@router.post("/request-email-verification")
+async def request_email_verification(
+    request: dict,
+    db: Session = Depends(get_db)
+):
+    """Request email verification code."""
+    from ..models import User, EmailVerificationCode
+    from ..core.security import generate_verification_code
+    
+    email = request.get('email')
+    if not email:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email required"
+        )
+    
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        # Don't reveal if user exists
+        return {"message": "If an account exists, verification email has been sent"}
+    
+    if user.is_verified:
+        return {"message": "Email already verified"}
+    
+    # Generate code
+    code = generate_verification_code()
+    
+    # Save verification code
+    verification = EmailVerificationCode(
+        user_id=user.id,
+        email=email,
+        verification_type="email",
+        verification_code=code,
+        expires_at=datetime.utcnow() + timedelta(hours=24)
+    )
+    db.add(verification)
+    db.commit()
+    
+    # Send email
+    from ..auth.email import EmailService
+    email_service = EmailService()
+    await email_service.send_verification_code(email, code)
+    
+    return {"message": "Verification email sent"}
+
+
+@router.post("/verify-email")
+async def verify_email(
+    request: dict,
+    db: Session = Depends(get_db)
+):
+    """Verify email with code."""
+    from ..models import User, EmailVerificationCode
+    
+    email = request.get('email')
+    code = request.get('code')
+    
+    if not email or not code:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email and code required"
+        )
+    
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    
+    # Find valid verification code
+    verification = db.query(EmailVerificationCode).filter(
+        EmailVerificationCode.user_id == user.id,
+        EmailVerificationCode.verification_code == code,
+        EmailVerificationCode.verification_type == "email",
+        EmailVerificationCode.is_used == False,
+        EmailVerificationCode.expires_at > datetime.utcnow()
+    ).first()
+    
+    if not verification:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid or expired code"
+        )
+    
+    # Mark as used
+    verification.is_used = True
+    user.is_verified = True
+    db.commit()
+    
+    return {"message": "Email verified successfully"}
+
+
+@router.post("/request-sms")
+async def request_sms_verification(
+    request: dict,
+    db: Session = Depends(get_db)
+):
+    """Request SMS verification code."""
+    from ..auth.sms import get_sms_service
+    from ..core.security import generate_verification_code
+    from ..models import User, EmailVerificationCode
+    
+    phone = request.get('phone')
+    if not phone:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Phone number required"
+        )
+    
+    # Generate code
+    code = generate_verification_code()
+    
+    # Send SMS first to check if it succeeds
+    sms_service = get_sms_service()
+    success = await sms_service.send_verification_code(phone, code)
+    
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to send SMS"
+        )
+    
+    # Only save to database if SMS sending succeeds
+    verification = EmailVerificationCode(
+        phone=phone,
+        verification_type="sms",
+        verification_code=code,
+        expires_at=datetime.utcnow() + timedelta(hours=1)  # Shorter expiry for SMS
+    )
+    db.add(verification)
+    db.commit()
+    
+    return {
+        "message": "SMS verification code sent",
+        "note": "Check your phone for the verification code"
+    }
+
+
+@router.post("/verify-sms")
+async def verify_sms(
+    request: dict,
+    db: Session = Depends(get_db)
+):
+    """Verify SMS code."""
+    from ..models import EmailVerificationCode
+    
+    phone = request.get('phone')
+    code = request.get('code')
+    
+    if not phone or not code:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Phone and code required"
+        )
+    
+    # Find valid SMS verification code
+    verification = db.query(EmailVerificationCode).filter(
+        EmailVerificationCode.phone == phone,
+        EmailVerificationCode.verification_code == code,
+        EmailVerificationCode.verification_type == "sms",
+        EmailVerificationCode.is_used == False,
+        EmailVerificationCode.expires_at > datetime.utcnow()
+    ).first()
+    
+    if not verification:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid or expired code"
+        )
+    
+    # Mark as used
+    verification.is_used = True
+    db.commit()
+    
+    return {
+        "message": "SMS verified successfully",
+        "phone": phone
+    }
+
+
+# ============ END EMAIL & SMS VERIFICATION ============

@@ -1,0 +1,41 @@
+# AdaptiveAuth Framework - Production Dependencies
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+sqlalchemy>=2.0.0
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+bcrypt>=4.1.2
+python-multipart>=0.0.6
+pyotp>=2.9.0
+qrcode[pil]>=7.4.2
+fastapi-mail>=1.4.1
+httpx>=0.25.0
+python-dateutil>=2.8.2
+user-agents>=2.2.0
+geoip2>=4.7.0
+aiofiles>=23.2.1
+
+# Email & SMS Services
+twilio>=8.0.0
+
+# Production & Monitoring
+gunicorn>=21.2.0
+psycopg2-binary>=2.9.7  # For PostgreSQL
+redis>=5.0.0  # For caching and session storage
+python-memcached>=1.59  # Alternative cache backend
+
+# Security & Performance
+cryptography>=41.0.0
+limits>=3.10.0  # For rate limiting
+slowapi>=0.1.9  # Rate limiting for FastAPI
+
+# Logging & Monitoring
+structlog>=23.1.0
+loguru>=0.7.0
+
+# Testing (for CI/CD)
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+requests>=2.31.0

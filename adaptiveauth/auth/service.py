@@ -78,6 +78,7 @@ class AuthService:
         verification = EmailVerificationCode(
             user_id=user.id,
             email=email,
+            verification_type="email",
             verification_code=verification_code,
             expires_at=datetime.utcnow() + timedelta(hours=24)
         )

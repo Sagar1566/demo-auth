@@ -1,0 +1,37 @@
+# Development dependencies for SAGAR AdaptiveAuth Framework
+
+# Testing
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.0.0
+coverage>=7.0.0
+
+# Code quality
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.0.0
+isort>=5.10.0
+pre-commit>=3.0.0
+
+# Documentation
+mkdocs>=1.4.0
+mkdocs-material>=9.0.0
+mkdocstrings>=0.20.0
+mkdocstrings-python>=1.1.0
+
+# Security
+bandit>=1.7.0
+safety>=2.0.0
+
+# Development tools
+jupyter>=1.0.0
+ipython>=8.0.0
+python-lsp-server>=1.7.0
+pylint>=3.0.0
+
+# Performance
+py-spy>=0.3.0
+
+# Additional dev tools
+pip-tools>=7.0.0
+virtualenv>=20.0.0

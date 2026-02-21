@@ -7,6 +7,13 @@ from pydantic_settings import BaseSettings
 from pydantic import Field
 from functools import lru_cache
 
+# Load .env file
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 
 class AdaptiveAuthSettings(BaseSettings):
     """Main configuration settings for AdaptiveAuth framework."""
@@ -34,6 +41,11 @@ class AdaptiveAuthSettings(BaseSettings):
     MAIL_SERVER: Optional[str] = Field(default=None, description="SMTP server")
     MAIL_STARTTLS: bool = Field(default=True, description="Use STARTTLS")
     MAIL_SSL_TLS: bool = Field(default=False, description="Use SSL/TLS")
+    
+    # SMS Configuration (Twilio)
+    TWILIO_ACCOUNT_SID: Optional[str] = Field(default=None, description="Twilio Account SID")
+    TWILIO_AUTH_TOKEN: Optional[str] = Field(default=None, description="Twilio Auth Token")
+    TWILIO_PHONE_NUMBER: Optional[str] = Field(default=None, description="Twilio Phone Number")
     
     # Risk Assessment Configuration
     ENABLE_RISK_ASSESSMENT: bool = Field(default=True, description="Enable risk-based authentication")
@@ -88,6 +100,7 @@ class RiskFactorWeights(BaseSettings):
     class Config:
         env_prefix = "ADAPTIVEAUTH_RISK_"
         env_file = ".env"
+        extra = "ignore"  # Ignore extra fields that don't belong to this config
 
 
 @lru_cache()

@@ -82,6 +82,7 @@ class User(Base):
     login_attempts = relationship("LoginAttempt", back_populates="user", cascade="all, delete-orphan")
     sessions = relationship("UserSession", back_populates="user", cascade="all, delete-orphan")
     risk_events = relationship("RiskEvent", back_populates="user", cascade="all, delete-orphan")
+    framework_usages = relationship("FrameworkUsage", back_populates="user", cascade="all, delete-orphan")
     
     __table_args__ = (
         Index("ix_user_email_active", "email", "is_active"),
@@ -228,13 +229,34 @@ class PasswordResetCode(Base):
     expires_at = Column(DateTime, nullable=False)
 
 
+class FrameworkUsage(Base):
+    """Framework usage tracking for monitoring who uses the framework."""
+    __tablename__ = "adaptiveauth_framework_usages"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    client_ip = Column(String(45), nullable=False)
+    user_agent = Column(Text)
+    endpoint_accessed = Column(String(255))
+    method = Column(String(10))
+    timestamp = Column(DateTime, default=datetime.utcnow)
+    risk_score = Column(Float, default=0.0)
+    is_anomalous = Column(Boolean, default=False)
+    anomaly_description = Column(Text)
+    
+    # Relationship to user if authenticated
+    user_id = Column(Integer, ForeignKey("adaptiveauth_users.id"), nullable=True)
+    user = relationship("User", back_populates="framework_usages")
+
+
 class EmailVerificationCode(Base):
     """Email verification codes."""
     __tablename__ = "adaptiveauth_email_verifications"
     
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("adaptiveauth_users.id", ondelete="CASCADE"))
-    email = Column(String(255), index=True)
+    email = Column(String(255), index=True)  # Can be None for SMS
+    phone = Column(String(20), index=True)  # Can be None for email
+    verification_type = Column(String(20), default="email")  # email or sms
     verification_code = Column(String(255), unique=True, index=True)
     is_used = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)

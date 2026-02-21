@@ -7,13 +7,15 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 
 from ..core.database import get_db
-from ..core.dependencies import get_current_user, get_current_session, get_client_info
+from ..core.dependencies import get_current_user, get_current_session, get_client_info, require_admin
 from ..core.security import generate_verification_code
 from ..auth.service import AuthService
 from ..risk.engine import RiskEngine
 from ..risk.monitor import SessionMonitor
 from ..models import User, UserSession, StepUpChallenge, RiskLevel
 from .. import schemas
+
+from ..risk.biometrics import get_biometrics
 
 router = APIRouter(prefix="/adaptive", tags=["Adaptive Authentication"])
 
@@ -317,3 +319,91 @@ async def remove_trusted_device(
         "status": "success",
         "message": f"Device '{removed.get('name', 'Unknown')}' has been removed"
     }
+
+
+# ============ BEHAVIORAL BIOMETRICS ENDPOINTS ============
+
+@router.post("/behavior/keystroke")
+async def record_keystroke(
+    request: Request,
+    keystroke_data: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """Record a keystroke for behavioral analysis."""
+    session_id = request.headers.get("X-Session-ID", str(current_user.id))
+    
+    biometrics = get_biometrics()
+    result = biometrics.record_keystroke(
+        session_id=session_id,
+        key=keystroke_data.get('key'),
+        timestamp=keystroke_data.get('timestamp'),
+        field_id=keystroke_data.get('field_id')
+    )
+    
+    return result
+
+
+@router.post("/behavior/mouse")
+async def record_mouse(
+    request: Request,
+    mouse_data: dict,
+    current_user: User = Depends(get_current_user)
+):
+    """Record mouse movement for behavioral analysis."""
+    session_id = request.headers.get("X-Session-ID", str(current_user.id))
+    
+    biometrics = get_biometrics()
+    
+    if mouse_data.get('type') == 'move':
+        result = biometrics.record_mouse_movement(
+            session_id=session_id,
+            x=mouse_data.get('x'),
+            y=mouse_data.get('y'),
+            timestamp=mouse_data.get('timestamp')
+        )
+    elif mouse_data.get('type') == 'click':
+        result = biometrics.record_click(
+            session_id=session_id,
+            x=mouse_data.get('x'),
+            y=mouse_data.get('y'),
+            button=mouse_data.get('button', 'left'),
+            timestamp=mouse_data.get('timestamp')
+        )
+    else:
+        result = biometrics.get_session_behavior(session_id)
+    
+    return result or {"message": "No behavior data yet"}
+
+
+@router.get("/behavior/status")
+async def get_behavior_status(
+    request: Request,
+    current_user: User = Depends(get_current_user)
+):
+    """Get current behavioral analysis status."""
+    session_id = request.headers.get("X-Session-ID", str(current_user.id))
+    
+    biometrics = get_biometrics()
+    result = biometrics.get_session_behavior(session_id)
+    
+    if not result:
+        return {
+            "human_score": 50,
+            "confidence": 0,
+            "is_likely_human": True,
+            "message": "Start typing or moving mouse to analyze behavior"
+        }
+    
+    return result
+
+
+@router.get("/behavior/all-sessions")
+async def get_all_behaviors(
+    current_user: User = Depends(require_admin())
+):
+    """Get behavioral analysis for all sessions (admin only)."""
+    biometrics = get_biometrics()
+    return biometrics.get_all_active_behaviors()
+
+
+# ============ END BEHAVIORAL BIOMETRICS ============

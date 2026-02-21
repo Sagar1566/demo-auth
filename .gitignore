@@ -1,8 +1,7 @@
-# Python build artifacts
+# Byte-compiled / optimized / DLL files
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
 *.so
 
 # Distribution artifacts
@@ -44,12 +43,15 @@ coverage.xml
 .DS_Store
 Thumbs.db
 
-# Local configuration
+# Environment variables
 .env
 .env.local
 .env.dev
 .env.test
 .env.prod
+.env.*
+
+# Configuration
 local_settings.py
 config.json
 secrets.json
@@ -81,3 +83,103 @@ testing/
 # Log files
 *.log
 logs/
+
+# MyPy
+typed/
+.mypy_cache/
+
+# Black
+.blk*
+
+# Coverage
+.coverage*
+
+# Jupyter
+.ipynb_checkpoints
+
+# Git
+.git/
+
+# Node
+node_modules/
+
+# Documentation
+docs/_build/
+
+# Sensitive files
+*.key
+*.pem
+*.crt
+*.cert
+secrets/
+credentials/
+keys/
+private/
+
+# Framework specific
+adaptiveauth.db
+
+# Coverage reports
+.coverage*
+htmlcov/
+.coverage
+
+# Pytest
+test_reports/
+.pytest_cache/
+
+# Security
+*.pem
+*.key
+.id_rsa
+.id_rsa.pub
+
+# IDE specific
+.vscode/
+.idea/
+.settings/
+*.iml
+*.iws
+
+# Editor
+*.swp
+*.swo
+*~
+
+# Python linters
+.flake8
+.pylintrc
+.isort.cfg
+
+# Local settings
+local_settings.py
+settings_local.py
+
+# Compiled files
+*.c
+*.o
+*.obj
+
+# Cache
+cache/
+.tmp/
+
+# System files
+*.tmp
+*.temp
+*.log
+
+# IDE temp files
+*.sublime-workspace
+*.sublime-project
+
+# Vim
+*.un~
+*.swp
+*.swo
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
