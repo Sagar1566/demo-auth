@@ -4,31 +4,62 @@
   "description": "JavaScript/TypeScript client for AdaptiveAuth Framework - Works with React, Node.js, and any JavaScript project",
   "main": "index.js",
   "types": "src/index.d.ts",
-  "license": "MIT",
-  "author": "SAGAR",
+  "module": "index.js",
+  "browser": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/adaptiveauth.git",
+    "directory": "mern-client"
+  },
+  "homepage": "https://github.com/yourusername/adaptiveauth#readme",
+  "bugs": {
+    "url": "https://github.com/yourusername/adaptiveauth/issues"
+  },
   "keywords": [
     "authentication",
     "adaptive-auth",
     "risk-based-auth",
-    "mern",
+    "security",
+    "jwt",
+    "2fa",
+    "mfa",
+    "oauth",
+    "sso",
     "react",
     "nodejs",
-    "jwt",
-    "2fa"
+    "javascript",
+    "typescript",
+    "api-client"
   ],
+  "author": {
+    "name": "SAGAR AdaptiveAuth Team",
+    "email": "contact@adaptiveauth.com"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo \"Build completed\"",
+    "prepublishOnly": "npm run build"
+  },
   "peerDependencies": {
-    "axios": ">=1.0.0",
-    "react": ">=17.0.0",
-    "express": ">=4.0.0"
+    "axios": ">=1.0.0"
   },
   "peerDependenciesMeta": {
-    "react": { "optional": true },
-    "express": { "optional": true }
+    "axios": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "typescript": "^5.0.0",
-    "@types/node": "^20.0.0",
-    "@types/react": "^18.0.0",
-    "@types/express": "^4.17.0"
-  }
+    "@types/node": "^20.0.0"
+  },
+  "files": [
+    "index.js",
+    "src/",
+    "README.md",
+    "LICENSE"
+  ]
 }

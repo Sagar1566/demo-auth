@@ -32,7 +32,7 @@ classifiers = [
     "Topic :: Security",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Internet :: WWW/HTTP :: Session",
-    "Topic :: Authentication/Authorization",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
 ]
 
 dependencies = [
